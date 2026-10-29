@@ -101,14 +101,32 @@ char* strDuplicate(char* src) {
         copia[i]=src[i];  // se le asigna a copia lo que contiene src
     }
 
+
     return copia
 }
 
 int strCompare(char* s1, char* s2) {
     // TODO: Devolver 0 si son iguales, 1 si s1 < s2, -1 si s1 > s2.
     //       Ojo: es la convencion INVERSA a strcmp.
-    return 0;
+
+    int i=0;
+    while(s1[i]!='\0'&& s2[i]!='\0'&& s1[i]==s2[i]){
+        i++;
+    } 
+    if(s1[i]=='\0'&& s2[i]=='\0'){
+        return 0;
+    }
+    if(s1[i]<s2[i]){
+        return 1;
+    }else{ 
+        return -1;
+      
+    }
+
 }
+
+return 0;
+
 
 char* strConcatenate(char* src1, char* src2) {
     // TODO: Reservar un string nuevo con src1 seguido de src2, y liberar src1 y src2.
