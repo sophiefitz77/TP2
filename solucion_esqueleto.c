@@ -101,37 +101,74 @@ char* strDuplicate(char* src) {
         copia[i]=src[i];  // se le asigna a copia lo que contiene src
     }
 
-
     return copia
 }
+#include <stdio.h>
+#include <stdlib.h>
 
 int strCompare(char* s1, char* s2) {
-    // TODO: Devolver 0 si son iguales, 1 si s1 < s2, -1 si s1 > s2.
-    //       Ojo: es la convencion INVERSA a strcmp.
-
-    int i=0;
+    
+    int i=0; //asignamos un i como indice, luego un bucle for con la condicion de que avance si las palabras son iguales.
     while(s1[i]!='\0'&& s2[i]!='\0'&& s1[i]==s2[i]){
         i++;
     } 
+    // si al finalizar el bucle se llega al final de ambas palabras entonces son iguales, por lo tanto devolvemos 0. 
     if(s1[i]=='\0'&& s2[i]=='\0'){
         return 0;
     }
+    // si no, evaluamos si s1 es menor a s2, si es asi se devuelve 1.
     if(s1[i]<s2[i]){
         return 1;
     }else{ 
+        // por descarte s2 es mayor a s1, devolvemos -1.
         return -1;
       
     }
 
 }
 
-return 0;
 
+
+#include <stdio.h>
+#include <stdlib.h>
 
 char* strConcatenate(char* src1, char* src2) {
-    // TODO: Reservar un string nuevo con src1 seguido de src2, y liberar src1 y src2.
-    //       Precondicion: src1 y src2 vienen de malloc y son punteros distintos.
-    return NULL;
+    
+
+    int longitud=0; // creamos la variable longitud para ver la longitud de la palabra concatenada.
+    for(int i=0;src1[i]!='\0';i++){
+        longitud++;
+        //realizamos un bucle para comenzar a contar las longitudes de los string.
+    }
+// realizamos otro bucle para saber cuanto sera la longitud total para la concatenacion. 
+    for(int j=0; src2[j]!='\0';j++){
+        longitud++;
+    }
+// ya que tenemos la longitud que vamos a necesitar solicitamos memoria con malloc. 
+    char* res=(char*)malloc((longitud+1)*sizeof(char));
+//evaluamos si solicitar a memoria falla. 
+    if(res==NULL){
+        return NULL;
+    }
+    int indice=0;
+// realizamos un bucle con src1 para concatenar src1 en res indice por indice. 
+    for(int g=0; src1[g]!='\0';g++){
+        res[indice]=src1[g];
+        indice++;
+    }
+//al ser punteros distintos realizamos otro bucle para concatenarlo en res. 
+    for(int h=0;src2[h]!='\0';h++){
+        res[indice]=src2[h];
+        indice++;
+    }
+    // se cierra el string con el caracter nulo.
+    res[indice]='\0';
+// liberamos src1 y src2 como pide la consigna. 
+    free(src1);
+    free(src2);
+//devolvemos la concatenacion total.
+    return res;
+
 }
 
 // ========= EJERCICIO 2: FUNCIONES A IMPLEMENTAR (EL TP) =========
