@@ -78,10 +78,30 @@ GameBoard* game_board = NULL;
 
 // ========= EJERCICIO 1: STRINGS (NO USAR string.h) =========
 
+#include <stdio.h>
+#include <stdlib.h>
 char* strDuplicate(char* src) {
-    // TODO: Contar los caracteres de src, reservar con malloc (no olvidar el '\0'),
-    //       copiar todo y devolver el puntero nuevo.
-    return NULL;
+
+    if(src==NULL){
+        return NULL; //caso base, quizas src sea vacio, si es el caso se devuelve NULL
+
+    }
+    int totallen=0;// almacenamos el largo de src en la variable total len 
+    for(;src[totallen]!='\0';totallen++){
+      // totallen ya es el contador predeterminado   
+    }
+
+    char* copia= (char*)malloc((totallen+1)*sizeof(char)); // se pide memoria por malloc, se le suma 1 para que la medida sea la correcta.
+
+    if(copia==NULL){
+        return NULL; // verifica si el malloc funciono. 
+    }
+
+    for(int i=0;i<totallen+1;i++){
+        copia[i]=src[i];  // se le asigna a copia lo que contiene src
+    }
+
+    return copia
 }
 
 int strCompare(char* s1, char* s2) {
