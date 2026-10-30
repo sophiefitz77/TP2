@@ -389,6 +389,63 @@ int inicializar() {
 void correrTests() {
     // TODO: Implementar los casos minimos del enunciado. Por ejemplo:
     //  - strDuplicate: "", "x", un string con distintos caracteres.
+
+    char* dup1 =strDuplicate("");               // un string vacio 
+    char* dup2 = strDuplicate("x");           // Un solo caracter
+    char* dup3 = strDuplicate("hola mundo");  // Distintos caracteres
+    
+    // Liberamos la memoria de los duplicados
+    free(dup1);
+    free(dup2);
+    free(dup3);
+
+
+
+
+    // caso de test str compare.
+    char* cmp_a1= strDuplicate("a");
+    char* cmp-a2= strDuplicate("a");
+    int r1=strCompare(cmp_a1,cmp_a2); // realizamos el caso de test a vs a para ver si funcionan en casos iguales 
+    free(c1);
+    free(c2);
+// realizamos un caso en donde son vacios 
+    char* cmp_vacio1 = strDuplicate("");
+    char* cmp_vacio2 = strDuplicate("");
+    int r2 = strCompare(cmp_vacio1, cmp_vacio2);
+    free(cmp_vacio1);
+    free(cmp_vacio2);
+// Desigualdad s1 < s2 (ej. "a" vs "b")
+    char* cmp_menor = strDuplicate("a");
+    char* cmp_mayor1 = strDuplicate("b");
+    int r3 = strCompare(cmp_menor, cmp_mayor1);
+    free(cmp_menor);
+    free(cmp_mayor1);
+// Desigualdad s2 < s1 / sentido inverso 
+    char* cmp_mayor2 = strDuplicate("b");
+    char* cmp_menor2 = strDuplicate("a");
+    int r4 = strCompare(cmp_mayor2, cmp_menor2);
+    free(cmp_mayor2);
+    free(cmp_menor2);
+
+// casos bases de strConcatenate
+// los argumentos se crean con strDuplicate porque strConcatenate los libera internamente.
+    
+    // Caso: "" + "abc"
+    char* cat1_s1 = strDuplicate("");
+    char* cat1_s2 = strDuplicate("abc");
+    char* res1 = strConcatenate(cat1_s1, cat1_s2); // Libera cat1_s1 y cat1_s2
+    free(res1); // Liberamos el resultado final que nos devuelve
+
+    // Caso: "hola " + "mundo"
+    char* cat2_s1 = strDuplicate("hola ");
+    char* cat2_s2 = strDuplicate("mundo");
+    char* res2 = strConcatenate(cat2_s1, cat2_s2); // Libera cat2_s1 y cat2_s2
+    free(res2); // Liberamos el resultado final
+
+
+
+
+
     //  - strCompare: "" vs "", "a" vs "a", y una desigualdad en ambos sentidos (s1/s2 y s2/s1).
     //  - strConcatenate: "" + "abc" y "hola " + "mundo". Los argumentos deben crearse con
     //    strDuplicate, porque strConcatenate los libera (no pasar literales).
@@ -398,6 +455,8 @@ void correrTests() {
     //    gameBoardCheckAndClearLines y comprobar que first_row es la fila nueva vacia y que
     //    la lista sigue teniendo 20 filas.
     // Liberar toda la memoria pedida en los tests (strings y tableros).
+
+
     printf("Tests no implementados.\n");
 }
 
