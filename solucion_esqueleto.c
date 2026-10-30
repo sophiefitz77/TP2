@@ -194,20 +194,43 @@ GameBoard* gameBoardNew() {
     board-> first_particle = NULL;
     board-> current_piece.active = NULL; 
 
-    // luego para 
+    // luego creamos las filas mediante una lista enlazada 
 
     board-> first_row =NULL;
     row_node* ultimonodo = NULL;
+// utilizamos memoria dinamica para crear los nodos, ademas de que luego revisamos si hay algun error al solicitar memoria. 
+    for(int i; i<GRID_ROWS; i++){
+        row_node* nuevo_nodo= (row_node*)malloc((sizeof)*(row_node*));
+
+        if(nuevo_nodo==NULL){
+            return NULL 
+        }
+    }
+
+    // Inicializar las celdas de la fila en 0
+        for (int c = 0; c < GRID_COLS; c++) {
+            nuevo_nodo->cells[c] = 0;
+        }
+        nuevo_nodo->next = NULL;
+
+        // Conectar el nodo a la lista
+        if (board->first_row == NULL) {
+            board->first_row = nuevo_nodo; // Es la primera fila
+        } else {
+            ultimo_nodo->next = nuevo_nodo; // La conectamos a la anterior
+        }
+        ultimo_nodo = nuevo_nodo;
+    }
+
+    return board;
 
 
 
 
 
 
+    
 
-    printf("Función gameBoardNew no implementada.\n");
-    return NULL;
-}
 
 void gameBoardDelete(GameBoard* board) {
     // TODO: Debe tolerar board == NULL.
