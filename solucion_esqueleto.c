@@ -178,6 +178,33 @@ GameBoard* gameBoardNew() {
     // TODO: Usar un bucle para hacer malloc de las 20 filas (RowNode) y conectarlas.
     // TODO: El puntero first_row debe apuntar al primero de esos nodos.
     // TODO: Inicializar queue_head, queue_tail y first_particle en NULL.
+
+    GameBoard* board= (GameBoard*)malloc((sizeof)*(GameBoard)); // solicitamos memoria dinamica
+
+    if(board==NULL){
+        return NULL 
+    }
+
+    // iniciamos campos base  para poder crear un nuevo game board 
+
+    board-> score=0;
+    board-> tick_timer = 0;
+    board-> queue_head = NULL;
+    board-> queue_tail = NULL;
+    board-> first_particle = NULL;
+    board-> current_piece.active = NULL; 
+
+    // luego para 
+
+    board-> first_row =NULL;
+    row_node* ultimonodo = NULL;
+
+
+
+
+
+
+
     printf("Función gameBoardNew no implementada.\n");
     return NULL;
 }
@@ -398,9 +425,6 @@ void correrTests() {
     free(dup1);
     free(dup2);
     free(dup3);
-
-
-
 
     // caso de test str compare.
     char* cmp_a1= strDuplicate("a");
