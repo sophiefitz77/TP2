@@ -78,8 +78,7 @@ GameBoard* game_board = NULL;
 
 // ========= EJERCICIO 1: STRINGS (NO USAR string.h) =========
 
-#include <stdio.h>
-#include <stdlib.h>
+
 char* strDuplicate(char* src) {
 
     if(src==NULL){
@@ -103,8 +102,7 @@ char* strDuplicate(char* src) {
 
     return copia
 }
-#include <stdio.h>
-#include <stdlib.h>
+
 
 int strCompare(char* s1, char* s2) {
     
@@ -129,8 +127,7 @@ int strCompare(char* s1, char* s2) {
 
 
 
-#include <stdio.h>
-#include <stdlib.h>
+
 
 char* strConcatenate(char* src1, char* src2) {
     
@@ -256,7 +253,7 @@ void gameBoardDelete(GameBoard* board) {
         curr_q = next_q;
     }
 
-    //Recorrer y liberar todas las particulas 
+    //Recorrer y liberar todas las particulas activas utilizando la misma estructura que en los otros bucles 
     ParticleNode* curr_part = board->first_particle;
     while (curr_part != NULL) {
         ParticleNode* next_part = curr_part->next;
@@ -271,7 +268,7 @@ void gameBoardDelete(GameBoard* board) {
 
 
     printf("Función gameBoardDelete no implementada.\n");
-}
+
 
 void gameBoardAddParticle(GameBoard* board, float x, float y, int color) {
     // TODO: Crear un ParticleNode con memoria dinámica.
