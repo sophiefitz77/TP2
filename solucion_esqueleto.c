@@ -174,10 +174,7 @@ char* strConcatenate(char* src1, char* src2) {
 // ========= EJERCICIO 2: FUNCIONES A IMPLEMENTAR (EL TP) =========
 
 GameBoard* gameBoardNew() {
-    // TODO: Reservar memoria para el GameBoard.
-    // TODO: Usar un bucle para hacer malloc de las 20 filas (RowNode) y conectarlas.
-    // TODO: El puntero first_row debe apuntar al primero de esos nodos.
-    // TODO: Inicializar queue_head, queue_tail y first_particle en NULL.
+    
 
     GameBoard* board= (GameBoard*)malloc((sizeof)*(GameBoard)); // solicitamos memoria dinamica
 
@@ -197,10 +194,10 @@ GameBoard* gameBoardNew() {
     // luego creamos las filas mediante una lista enlazada 
 
     board-> first_row =NULL;
-    row_node* ultimonodo = NULL;
+    Row_Node* ultimonodo = NULL;
 // utilizamos memoria dinamica para crear los nodos, ademas de que luego revisamos si hay algun error al solicitar memoria. 
     for(int i; i<GRID_ROWS; i++){
-        row_node* nuevo_nodo= (row_node*)malloc((sizeof)*(row_node*));
+        Row_Node* nuevo_nodo= (Row_Node*)malloc((sizeof)*(Row_Node*));
 
         if(nuevo_nodo==NULL){
             return NULL 
@@ -238,6 +235,41 @@ void gameBoardDelete(GameBoard* board) {
     // TODO: Recorrer y liberar todos los PieceQueueNode.
     // TODO: Recorrer y liberar todos los ParticleNode.
     // TODO: Finalmente, liberar la estructura GameBoard.
+
+    if(board=NULL){
+        return; // si el board esta vacio no se realiza nada 
+    }
+
+    // ahora recorremos y liberamos todas las filas
+    Row_Node* curr_row = board-> firts_row;
+    while(curr_row!= NULL){
+        Row_Node* next_row = curr_row->next; //guardamos el siguiente 
+        free(curr_row); // borramos el actual
+        curr_row = next_row; // asignamos el actual al siguiente para luego borrarlo
+    }
+
+    // Recorrer y liberar la cola de proximas piezas (PieceQueueNode)
+    PieceQueueNode* curr_q = board->queue_head;
+    while (curr_q != NULL) {
+        PieceQueueNode* next_q = curr_q->next;
+        free(curr_q);
+        curr_q = next_q;
+    }
+
+    //Recorrer y liberar todas las particulas 
+    ParticleNode* curr_part = board->first_particle;
+    while (curr_part != NULL) {
+        ParticleNode* next_part = curr_part->next;
+        free(curr_part);
+        curr_part = next_part;
+    }
+
+     //Finalmente, liberar la estructura principal del GameBoard
+    free(board);
+}
+
+
+
     printf("Función gameBoardDelete no implementada.\n");
 }
 
