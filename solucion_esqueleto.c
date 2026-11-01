@@ -482,8 +482,8 @@ void correrTests() {
     char* cmp_a1= strDuplicate("a");
     char* cmp-a2= strDuplicate("a");
     int r1=strCompare(cmp_a1,cmp_a2); // realizamos el caso de test a vs a para ver si funcionan en casos iguales 
-    free(c1);
-    free(c2);
+    free(cmp_a1);
+    free(cmp_a2);
 // realizamos un caso en donde son vacios 
     char* cmp_vacio1 = strDuplicate("");
     char* cmp_vacio2 = strDuplicate("");
