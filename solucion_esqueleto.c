@@ -100,7 +100,7 @@ char* strDuplicate(char* src) {
         copia[i]=src[i];  // se le asigna a copia lo que contiene src
     }
 
-    return copia
+    return copia;
 }
 
 
@@ -173,10 +173,10 @@ char* strConcatenate(char* src1, char* src2) {
 GameBoard* gameBoardNew() {
     
 
-    GameBoard* board= (GameBoard*)malloc((sizeof)*(GameBoard)); // solicitamos memoria dinamica
+    GameBoard* board= (GameBoard*)malloc((sizeof)(GameBoard)); // solicitamos memoria dinamica
 
     if(board==NULL){
-        return NULL 
+        return NULL;
     }
 
     // iniciamos campos base  para poder crear un nuevo game board 
@@ -186,18 +186,18 @@ GameBoard* gameBoardNew() {
     board-> queue_head = NULL;
     board-> queue_tail = NULL;
     board-> first_particle = NULL;
-    board-> current_piece.active = NULL; 
+    board-> current_piece.active = 0; 
 
     // luego creamos las filas mediante una lista enlazada 
 
     board-> first_row =NULL;
     Row_Node* ultimonodo = NULL;
 // utilizamos memoria dinamica para crear los nodos, ademas de que luego revisamos si hay algun error al solicitar memoria. 
-    for(int i; i<GRID_ROWS; i++){
-        Row_Node* nuevo_nodo= (Row_Node*)malloc((sizeof)*(Row_Node*));
+    for(int i=0; i<GRID_ROWS; i++){
+        RowNode* nuevo_nodo= (RowNode*)malloc((sizeof)(RowNode*));
 
         if(nuevo_nodo==NULL){
-            return NULL 
+            return NULL;
         }
     }
 
@@ -233,14 +233,14 @@ void gameBoardDelete(GameBoard* board) {
     // TODO: Recorrer y liberar todos los ParticleNode.
     // TODO: Finalmente, liberar la estructura GameBoard.
 
-    if(board=NULL){
+    if(board==NULL){
         return; // si el board esta vacio no se realiza nada 
     }
 
     // ahora recorremos y liberamos todas las filas
-    Row_Node* curr_row = board-> firts_row;
+    RowNode* curr_row = board-> firts_row;
     while(curr_row!= NULL){
-        Row_Node* next_row = curr_row->next; //guardamos el siguiente 
+        RowNode* next_row = curr_row->next; //guardamos el siguiente 
         free(curr_row); // borramos el actual
         curr_row = next_row; // asignamos el actual al siguiente para luego borrarlo
     }
@@ -267,14 +267,47 @@ void gameBoardDelete(GameBoard* board) {
 
 
 
-    printf("Función gameBoardDelete no implementada.\n");
+    
 
 
 void gameBoardAddParticle(GameBoard* board, float x, float y, int color) {
     // TODO: Crear un ParticleNode con memoria dinámica.
     // TODO: Inicializar x, y, velocidades aleatorias y un life_timer.
     // TODO: Agregarlo al principio de la lista enlazada simple de partículas.
-    printf("Función gameBoardAddParticle no implementada.\n");
+
+    if(board == NULL){
+        return ; // al ser del tipo void, se retorna sin valor 
+    }
+    // creamos la variable particle node con memoria dinamica.
+    ParticleNode* nueva_part= (ParticleNode*)malloc((sizeof)(ParticleNode));
+
+    if(nueva_part == NULL){
+        return NULL;
+    }
+
+    // inicializamos x, y, velocidades aleatorias y un life timer
+    
+    nueva_part->x = x;
+    nueva_part-> y= y;
+    nueva_part->color = color;
+    nueva_part->life_timer = 30 + (rand() % 30); // entre 30 y 59 tics como se aclara en juego base.c
+
+    // Darles velocidades aleatorias (similares al prototipo estatico del esqueleto)
+    nueva_part->vel_x = ((rand() % 100) / 10.0f) - 5.0f; // Velocidad horizontal variada
+    nueva_part->vel_y = ((rand() % 50) / -10.0f) - 2.0f;  // Impulso hacia arriba
+
+    // Agregarlo al PRINCIPIO de la lista enlazada simple de particulas
+    nueva_part->next = board->first_particle;
+    board->first_particle = nueva_part;
+
+
+
+
+
+
+
+
+    printf("Funcion gameBoardAddParticle no implementada.\n");
 }
 
 int gameBoardCheckAndClearLines(GameBoard* board) {
