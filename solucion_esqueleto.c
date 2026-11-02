@@ -316,8 +316,58 @@ int gameBoardCheckAndClearLines(GameBoard* board) {
     // TODO: Crear un nuevo RowNode vacío (lleno de ceros).
     // TODO: Insertar el nuevo RowNode en la CABEZA del tablero (board->first_row).
     // TODO: Por cada celda destruida, invocar a gameBoardAddParticle().
-    printf("Función gameBoardCheckAndClearLines no implementada.\n");
-    return 0;
+    int llenas = 0;
+    RowNode* actual = board->first_row;
+    RowNode* antes = NULL;
+    int fila = 0;
+    //revisamos si las filas estan ocupadas
+    while (actual != NULL){
+        int ocupada = 1;
+        for (int z=0; z < GRID_COLS; z++){
+            if (actual->cells[z]==0){
+                ocupada=0;
+            }
+        }
+        //definimos proxima fila
+        RowNode* proxima = actual->next;
+
+        //hacemos un if para ver si la fila esta ocupada, si lo esta, se borra y se agrega una nueva fila vacia al inicio del tablero
+        if (ocupada){
+            for (int z=0; z < GRID_COLS; z++){
+                gameBoardAddParticle(board, (OFFSET_X + z * CELL_SIZE + CELL_SIZE / 2), (OFFSET_Y + fila * CELL_SIZE + CELL_SIZE / 2), actual->cells[z]);
+            }
+            if (antes==NULL){
+                board->first_row = proxima;
+            } else {
+                antes->next = proxima;
+            }
+            free(actual);
+            llenas= llenas + 1;
+        } 
+
+        //si la fila no esta ocupada, se pasa a la siguiente
+        else {
+            antes = actual;
+        }
+        else {
+            antes = actual;
+        }
+
+        actual = proxima;
+    }
+    //agregamos las filas vacias al inicio del tablero
+    for (int i=0; i < llenas; i++){
+        RowNode* nuevaFila = (RowNode*) malloc(sizeof(RowNode));
+        if (nuevaFila==NULL){
+            return llenas;
+        }
+        for (int z=0; z < GRID_COLS; z++){
+            nuevaFila->cells[z]=0;
+        }
+        nuevaFila->next = board->first_row;
+        board->first_row = nuevaFila;
+    }
+    return llenas;
 }
 
 void gameBoardEnqueuePiece(GameBoard* board, int type) {
