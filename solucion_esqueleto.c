@@ -314,7 +314,6 @@ int gameBoardDequeuePiece(GameBoard* board, int* out_type) {
     // TODO: Si la cola está vacía, retornar 0.
     // TODO: Extraer el primer nodo (queue_head).
     // TODO: Guardar el type en la variable out_type, liberar el nodo y actualizar el head.
-    int gameBoardDequeuePiece(GameBoard* board, int* out_type) {
     if (board->queue_head==NULL){
         return 0;
     }
@@ -327,7 +326,7 @@ int gameBoardDequeuePiece(GameBoard* board, int* out_type) {
     }
     return 1;
 }
-}
+
 
 // ========= LOGICA DE DIBUJADO Y COLISIONES (NO MODIFICAR) =========
 
