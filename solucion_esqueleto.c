@@ -173,7 +173,7 @@ char* strConcatenate(char* src1, char* src2) {
 GameBoard* gameBoardNew() {
     
 
-    GameBoard* board= (GameBoard*)malloc((sizeof)(GameBoard)); // solicitamos memoria dinamica
+    GameBoard* board= (GameBoard*)malloc(sizeof(GameBoard)); // solicitamos memoria dinamica
 
     if(board==NULL){
         return NULL;
@@ -191,20 +191,21 @@ GameBoard* gameBoardNew() {
     // luego creamos las filas mediante una lista enlazada 
 
     board-> first_row =NULL;
-    Row_Node* ultimonodo = NULL;
+    RowNode* ultimo_nodo = NULL;
 // utilizamos memoria dinamica para crear los nodos, ademas de que luego revisamos si hay algun error al solicitar memoria. 
     for(int i=0; i<GRID_ROWS; i++){
-        RowNode* nuevo_nodo= (RowNode*)malloc((sizeof)(RowNode*));
+    }
+        RowNode* nuevo_nodo= (RowNode*)malloc(sizeof(RowNode));
 
         if(nuevo_nodo==NULL){
             return NULL;
         }
-    }
+    
 
     // Inicializar las celdas de la fila en 0
         for (int c = 0; c < GRID_COLS; c++) {
             nuevo_nodo->cells[c] = 0;
-        }
+        
         nuevo_nodo->next = NULL;
 
         // Conectar el nodo a la lista
@@ -215,8 +216,10 @@ GameBoard* gameBoardNew() {
         }
         ultimo_nodo = nuevo_nodo;
     }
-
     return board;
+    }
+
+    
 
 
 
@@ -238,7 +241,7 @@ void gameBoardDelete(GameBoard* board) {
     }
 
     // ahora recorremos y liberamos todas las filas
-    RowNode* curr_row = board-> firts_row;
+    RowNode* curr_row = board-> first_row;
     while(curr_row!= NULL){
         RowNode* next_row = curr_row->next; //guardamos el siguiente 
         free(curr_row); // borramos el actual
@@ -279,10 +282,10 @@ void gameBoardAddParticle(GameBoard* board, float x, float y, int color) {
         return ; // al ser del tipo void, se retorna sin valor 
     }
     // creamos la variable particle node con memoria dinamica.
-    ParticleNode* nueva_part= (ParticleNode*)malloc((sizeof)(ParticleNode));
+    ParticleNode* nueva_part= (ParticleNode*)malloc(sizeof(ParticleNode));
 
     if(nueva_part == NULL){
-        return NULL;
+        return ; // devuelve nada al ser void. 
     }
 
     // inicializamos x, y, velocidades aleatorias y un life timer
@@ -307,7 +310,7 @@ void gameBoardAddParticle(GameBoard* board, float x, float y, int color) {
 
 
 
-    printf("Funcion gameBoardAddParticle no implementada.\n");
+    
 }
 
 int gameBoardCheckAndClearLines(GameBoard* board) {
@@ -343,17 +346,16 @@ int gameBoardCheckAndClearLines(GameBoard* board) {
             }
             free(actual);
             llenas= llenas + 1;
-        } 
+         
 
         //si la fila no esta ocupada, se pasa a la siguiente
-        else {
+        }else {
             antes = actual;
         }
-        else {
-            antes = actual;
-        }
+        
 
         actual = proxima;
+        fila++;
     }
     //agregamos las filas vacias al inicio del tablero
     for (int i=0; i < llenas; i++){
@@ -373,7 +375,10 @@ int gameBoardCheckAndClearLines(GameBoard* board) {
 void gameBoardEnqueuePiece(GameBoard* board, int type) {
     // TODO: Crear un PieceQueueNode con el 'type'.
     // TODO: Insertarlo al final de la cola (queue_tail) y actualizar punteros.
-     PieceQueueNode* nuevo = (PieceQueueNode*) malloc(sizeof(int));
+    if(board==NULL){
+        return;
+    }
+     PieceQueueNode* nuevo = (PieceQueueNode*)malloc(sizeof(PieceQueueNode));
     if (nuevo==NULL) {
         return;
     }
@@ -583,58 +588,51 @@ void correrTests() {
     char* dup2 = strDuplicate("x");           // Un solo caracter
     char* dup3 = strDuplicate("hola mundo");  // Distintos caracteres
     
-    // Liberamos la memoria de los duplicados
-    free(dup1);
-    free(dup2);
-    free(dup3);
+    // Liberamos la memoria de los duplicados y chequeamos que esten bien 
+    if (d1 == NULL || d1[0] != '\0') { printf("FALLO: strDuplicate vacio\n"); fallos++; }
+    if (d2 == NULL || d2[0] != 'x' || d2[1] != '\0') { printf("FALLO: strDuplicate 'x'\n"); fallos++; }
+    if (d3 == NULL || strCompare(d3, "hola mundo") != 0) { printf("FALLO: strDuplicate 'hola mundo'\n"); fallos++; }
+    free(d1); free(d2); free(d3);
 
-    // caso de test str compare.
-    char* cmp_a1= strDuplicate("a");
-    char* cmp-a2= strDuplicate("a");
-    int r1=strCompare(cmp_a1,cmp_a2); // realizamos el caso de test a vs a para ver si funcionan en casos iguales 
-    free(cmp_a1);
-    free(cmp_a2);
-// realizamos un caso en donde son vacios 
-    char* cmp_vacio1 = strDuplicate("");
-    char* cmp_vacio2 = strDuplicate("");
-    int r2 = strCompare(cmp_vacio1, cmp_vacio2);
-    free(cmp_vacio1);
-    free(cmp_vacio2);
-// Desigualdad s1 < s2 (ej. "a" vs "b")
-    char* cmp_menor = strDuplicate("a");
-    char* cmp_mayor1 = strDuplicate("b");
-    int r3 = strCompare(cmp_menor, cmp_mayor1);
-    free(cmp_menor);
-    free(cmp_mayor1);
-// Desigualdad s2 < s1 / sentido inverso 
-    char* cmp_mayor2 = strDuplicate("b");
-    char* cmp_menor2 = strDuplicate("a");
-    int r4 = strCompare(cmp_mayor2, cmp_menor2);
-    free(cmp_mayor2);
-    free(cmp_menor2);
+
+    
+    // ================= strCompare =================
+    // Creamos los strings con strDuplicate para poder liberarlos despues.
+    char* a1 = strDuplicate("a");
+    char* a2 = strDuplicate("a");
+    char* v1 = strDuplicate("");
+    char* v2 = strDuplicate("");
+    char* b  = strDuplicate("b");
+
+    // Iguales: "" vs "" y "a" vs "a" deben dar 0.
+    if (strCompare(v1, v2) != 0) { printf("FALLO: '' vs ''\n"); fallos++; }
+    if (strCompare(a1, a2) != 0) { printf("FALLO: 'a' vs 'a'\n"); fallos++; }
+
+    // Desigualdad en ambos sentidos. Segun tu convencion:
+    // s1 < s2 devuelve 1, y s1 > s2 devuelve -1.
+    if (strCompare(a1, b) != 1)  { printf("FALLO: 'a' vs 'b'\n"); fallos++; }
+    if (strCompare(b, a1) != -1) { printf("FALLO: 'b' vs 'a'\n"); fallos++; }
+
+    free(a1); free(a2); free(v1); free(v2); free(b);
+
+
+   
 
 // casos bases de strConcatenate
 // los argumentos se crean con strDuplicate porque strConcatenate los libera internamente.
     
-    // Caso: "" + "abc"
-    char* cat1_s1 = strDuplicate("");
-    char* cat1_s2 = strDuplicate("abc");
-    char* res1 = strConcatenate(cat1_s1, cat1_s2); // Libera cat1_s1 y cat1_s2
-    free(res1); // Liberamos el resultado final que nos devuelve
+    char* r1 = strConcatenate(strDuplicate(""), strDuplicate("abc"));
+    char* r2 = strConcatenate(strDuplicate("hola "), strDuplicate("mundo"));
 
-    // Caso: "hola " + "mundo"
-    char* cat2_s1 = strDuplicate("hola ");
-    char* cat2_s2 = strDuplicate("mundo");
-    char* res2 = strConcatenate(cat2_s1, cat2_s2); // Libera cat2_s1 y cat2_s2
-    free(res2); // Liberamos el resultado final
+    // Verificamos que el resultado sea el esperado.
+    if (strCompare(r1, "abc") != 0) { printf("FALLO: '' + 'abc'\n"); fallos++; }
+    if (strCompare(r2, "hola mundo") != 0) { printf("FALLO: 'hola ' + 'mundo'\n"); fallos++; }
+
+    // Lo unico que hay que liberar es el resultado final.
+    free(r1); free(r2);
 
 
 
-
-
-    //  - strCompare: "" vs "", "a" vs "a", y una desigualdad en ambos sentidos (s1/s2 y s2/s1).
-    //  - strConcatenate: "" + "abc" y "hola " + "mundo". Los argumentos deben crearse con
-    //    strDuplicate, porque strConcatenate los libera (no pasar literales).
     //  - Cola: 5 push y 6 pop; el 6to debe devolver 0 y dejar queue_head y queue_tail en NULL.
     //    Verificar tambien que un push posterior funcione.
     //  - Tablero: llenar la fila de indice 19 (la de abajo), llamar a
