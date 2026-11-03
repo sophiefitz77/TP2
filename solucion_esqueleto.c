@@ -168,14 +168,18 @@ char* strConcatenate(char* src1, char* src2) {
 
 }
 
+
+
+
 // ========= EJERCICIO 2: FUNCIONES A IMPLEMENTAR (EL TP) =========
+
+void gameBoardDelete(GameBoard* board); // funcion implementada más abajo, se declara acá para que gameBoardNew pueda llamarla en caso de error.
 
 GameBoard* gameBoardNew() {
     
-
     GameBoard* board= (GameBoard*)malloc(sizeof(GameBoard)); // solicitamos memoria dinamica
 
-    if(board==NULL){
+    if(board==NULL){ // verificamos si la memoria fue solicitada correctamente, si no es asi devolvemos NULL.
         return NULL;
     }
 
@@ -192,11 +196,13 @@ GameBoard* gameBoardNew() {
 
     board-> first_row =NULL;
     RowNode* ultimo_nodo = NULL;
-// utilizamos memoria dinamica para crear los nodos, ademas de que luego revisamos si hay algun error al solicitar memoria. 
+    
+    // utilizamos memoria dinamica para crear los nodos, ademas de que luego revisamos si hay algun error al solicitar memoria. 
     for(int i=0; i<GRID_ROWS; i++){
         RowNode* nuevo_nodo= (RowNode*)malloc(sizeof(RowNode));
 
         if(nuevo_nodo==NULL){
+            gameBoardDelete(board); // si hay un error al solicitar memoria, se libera la memoria solicitada y se devuelve NULL.
             return NULL;
         }
     
@@ -220,12 +226,6 @@ GameBoard* gameBoardNew() {
 
     
 
-
-
-
-
-
-    
 
 
 void gameBoardDelete(GameBoard* board) {
@@ -642,6 +642,11 @@ void correrTests() {
 
     GameBoard* test_board = gameBoardNew(); //creamos un nuevo tablero para testear la cola
     int valor = -1;         //para guardar el valor que se saca de la cola (-1 es un valor distinto a los posibles para las piezas)
+
+    if (test_board == NULL) {
+        printf("FALLO: gameBoardNew devuelve NULL\n");
+        fallos++;
+    }
 
     for(int i = 0; i < 5; i++) {
         gameBoardEnqueuePiece(test_board, i);   //entran las piezas 0,1,2,3,4
