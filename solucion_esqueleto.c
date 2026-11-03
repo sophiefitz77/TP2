@@ -194,7 +194,6 @@ GameBoard* gameBoardNew() {
     RowNode* ultimo_nodo = NULL;
 // utilizamos memoria dinamica para crear los nodos, ademas de que luego revisamos si hay algun error al solicitar memoria. 
     for(int i=0; i<GRID_ROWS; i++){
-    }
         RowNode* nuevo_nodo= (RowNode*)malloc(sizeof(RowNode));
 
         if(nuevo_nodo==NULL){
@@ -205,7 +204,7 @@ GameBoard* gameBoardNew() {
     // Inicializar las celdas de la fila en 0
         for (int c = 0; c < GRID_COLS; c++) {
             nuevo_nodo->cells[c] = 0;
-        
+        }
         nuevo_nodo->next = NULL;
 
         // Conectar el nodo a la lista
@@ -217,7 +216,7 @@ GameBoard* gameBoardNew() {
         ultimo_nodo = nuevo_nodo;
     }
     return board;
-    }
+}
 
     
 
@@ -580,13 +579,24 @@ int inicializar() {
 
 // ========= TESTS (COMPLETAR) =========
 
+int contarFilas(GameBoard* board) {         //funcion para contar la cantidad de filas que tiene el tablero, se utiliza para testear que la funcion gameBoardCheckAndClearLines funcione correctamente.
+    int contador = 0;                       //contador de filas, empieza en 0
+    RowNode* actual = board->first_row;     //puntero que apunta a la primera fila del tablero
+    while (actual != NULL) {
+        contador++;
+        actual = actual->next;
+    }
+    return contador;
+}
+
+
 void correrTests() {
     // TODO: Implementar los casos minimos del enunciado. Por ejemplo:
     //  - strDuplicate: "", "x", un string con distintos caracteres.
-
-    char* dup1 =strDuplicate("");               // un string vacio 
-    char* dup2 = strDuplicate("x");           // Un solo caracter
-    char* dup3 = strDuplicate("hola mundo");  // Distintos caracteres
+    int fallos = 0;
+    char* d1 =strDuplicate("");               // un string vacio 
+    char* d2 = strDuplicate("x");           // Un solo caracter
+    char* d3 = strDuplicate("hola mundo");  // Distintos caracteres
     
     // Liberamos la memoria de los duplicados y chequeamos que esten bien 
     if (d1 == NULL || d1[0] != '\0') { printf("FALLO: strDuplicate vacio\n"); fallos++; }
@@ -632,12 +642,88 @@ void correrTests() {
     free(r1); free(r2);
 
 
-
+    // ================= Cola =================
     //  - Cola: 5 push y 6 pop; el 6to debe devolver 0 y dejar queue_head y queue_tail en NULL.
+
+    GameBoard* test_board = gameBoardNew(); //creamos un nuevo tablero para testear la cola
+    int valor = -1;         //para guardar el valor que se saca de la cola (-1 es un valor distinto a los posibles para las piezas)
+
+    for(int i = 0; i < 5; i++) {
+        gameBoardEnqueuePiece(test_board, i);   //entran las piezas 0,1,2,3,4
+    }
+
+    for(int i = 0; i < 5; i++) {
+        int resultado = gameBoardDequeuePiece(test_board, &valor); //sale una pieza y se guarda en valor
+        if (resultado != 1 || valor != i) {
+            printf("FALLO: orden FIFO\n");
+            fallos++;
+        }
+    }
+
+    //6to pop
+    if (gameBoardDequeuePiece(test_board, &valor) != 0) { 
+        printf("FALLO: 6to pop no devuelve 0\n");
+        fallos++;
+    }
+
+    if (test_board->queue_head != NULL || test_board->queue_tail != NULL) {
+        printf("FALLO: queue_head o queue_tail no son NULL despues de vaciar la cola\n");
+        fallos++;
+    }
+
+    if (valor != 4) { //el valor de la variable valor no deberia haber cambiado, ya que el 6to pop no modifica el valor
+        printf("FALLO: valor de variable 'valor' cambio despues de 6to pop\n");
+        fallos++;
+    }
+
     //    Verificar tambien que un push posterior funcione.
+    gameBoardEnqueuePiece(test_board, 6);
+    if (gameBoardDequeuePiece(test_board, &valor) != 1 || valor != 6) {
+        printf("FALLO: push despues de vaciar la cola no funciona\n");
+        fallos++;
+    }
+
+    gameBoardDelete(test_board); //liberamos el tablero de prueba
+
+
     //  - Tablero: llenar la fila de indice 19 (la de abajo), llamar a
     //    gameBoardCheckAndClearLines y comprobar que first_row es la fila nueva vacia y que
     //    la lista sigue teniendo 20 filas.
+
+    GameBoard* test_board2 = gameBoardNew();//creamos un nuevo tablero con 20 filas vacias
+    RowNode* primera_fila = test_board2->first_row; //guardamos cual es la primera fila al principio
+
+    RowNode* ultima_fila = getRowAt(test_board2, 19); //buscamos la fila 19 (la última)
+    for(int c = 0; c < GRID_COLS; c++) {
+        ultima_fila->cells[c] = 1;  //llenamos la fila de abajo con 1s
+    }
+
+    int lineas_borradas = gameBoardCheckAndClearLines(test_board2); //llamamos a la funcion para borrar la fila llena
+
+    if (lineas_borradas != 1) { //deberia haber borrado 1 fila
+        printf("FALLO: gameBoardCheckAndClearLines no devuelve 1 al borrar una fila\n");
+        fallos++;
+    }
+
+    if(test_board2->first_row == primera_fila) { //la primera fila deberia ser distinta a la que habia al principio, ya que se borro la fila de abajo y se agrego una nueva al inicio
+        printf("FALLO: gameBoardCheckAndClearLines no actualiza first_row\n");
+        fallos++;
+    }
+
+    for (int c= 0; c < GRID_COLS; c++) {
+        if (test_board2->first_row->cells[c] != 0) { //la nueva primera fila deberia estar vacia
+            printf("FALLO: gameBoardCheckAndClearLines no crea una nueva fila vacia\n");
+            fallos++;
+        }
+    }
+
+    if (contarFilas(test_board2) != GRID_ROWS) { //deberia seguir habiendo 20 filas
+        printf("FALLO: gameBoardCheckAndClearLines no mantiene la cantidad de filas en 20\n");
+        fallos++;
+    }
+
+    gameBoardDelete(test_board2);
+
     // Liberar toda la memoria pedida en los tests (strings y tableros).
 
 
