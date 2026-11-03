@@ -302,13 +302,6 @@ void gameBoardAddParticle(GameBoard* board, float x, float y, int color) {
     nueva_part->next = board->first_particle;
     board->first_particle = nueva_part;
 
-
-
-
-
-
-
-
     
 }
 
@@ -370,6 +363,7 @@ int gameBoardCheckAndClearLines(GameBoard* board) {
     }
     return llenas;
 }
+
 
 void gameBoardEnqueuePiece(GameBoard* board, int type) {
     // TODO: Crear un PieceQueueNode con el 'type'.
@@ -577,6 +571,8 @@ int inicializar() {
     return 1;
 }
 
+
+
 // ========= TESTS (COMPLETAR) =========
 
 int contarFilas(GameBoard* board) {         //funcion para contar la cantidad de filas que tiene el tablero, se utiliza para testear que la funcion gameBoardCheckAndClearLines funcione correctamente.
@@ -594,7 +590,7 @@ void correrTests() {
     // TODO: Implementar los casos minimos del enunciado. Por ejemplo:
     //  - strDuplicate: "", "x", un string con distintos caracteres.
     int fallos = 0;
-    char* d1 =strDuplicate("");               // un string vacio 
+    char* d1 =strDuplicate("");             // un string vacio 
     char* d2 = strDuplicate("x");           // Un solo caracter
     char* d3 = strDuplicate("hola mundo");  // Distintos caracteres
     
@@ -626,7 +622,6 @@ void correrTests() {
     free(a1); free(a2); free(v1); free(v2); free(b);
 
 
-   
 
 // casos bases de strConcatenate
 // los argumentos se crean con strDuplicate porque strConcatenate los libera internamente.
@@ -686,9 +681,7 @@ void correrTests() {
     gameBoardDelete(test_board); //liberamos el tablero de prueba
 
 
-    //  - Tablero: llenar la fila de indice 19 (la de abajo), llamar a
-    //    gameBoardCheckAndClearLines y comprobar que first_row es la fila nueva vacia y que
-    //    la lista sigue teniendo 20 filas.
+    //  - Tablero: llenar la fila de indice 19 (la de abajo), llamar a gameBoardCheckAndClearLines y comprobar que first_row es la fila nueva vacia y que la lista sigue teniendo 20 filas.
 
     GameBoard* test_board2 = gameBoardNew();//creamos un nuevo tablero con 20 filas vacias
     RowNode* primera_fila = test_board2->first_row; //guardamos cual es la primera fila al principio
@@ -724,11 +717,51 @@ void correrTests() {
 
     gameBoardDelete(test_board2);
 
+
+    // ================= filas 0 y 1 =================
+
+    GameBoard* test_board3 = gameBoardNew(); //creamos un nuevo tablero con 20 filas vacias
+
+    RowNode* fila0 = getRowAt(test_board3, 0); //primera fila
+    RowNode* fila1 = getRowAt(test_board3, 1); //segunda fila
+    for(int c = 0; c < GRID_COLS; c++) {
+        fila0->cells[c] = 1; //llenamos la primera fila con 1s
+        fila1->cells[c] = 1; //llenamos la segunda fila con 1s
+    }
+
+    int lineas_borradas2 = gameBoardCheckAndClearLines(test_board3); //llamamos a la funcion para borrar las filas llenas
+
+    if (lineas_borradas2 != 2) { //deberia haber borrado 2 filas
+        printf("FALLO: gameBoardCheckAndClearLines no devuelve 2 al borrar dos filas\n");
+        fallos++;
+    }
+
+    if (contarFilas(test_board3) != GRID_ROWS) { //deberia seguir habiendo 20 filas
+        printf("FALLO: gameBoardCheckAndClearLines no mantiene la cantidad de filas en 20 despues de borrar dos filas\n");
+        fallos++;
+    }
+
+    for(int c= 0; c < GRID_COLS; c++) {
+        if(getRowAt(test_board3, 0)->cells[c] != 0 || getRowAt(test_board3, 1)->cells[c] != 0) { //las nuevas filas 0 y 1 deberian estar vacias
+            printf("FALLO: gameBoardCheckAndClearLines no crea nuevas filas vacias despues de borrar dos filas\n");
+            fallos++;
+        }
+    }
+
+    gameBoardDelete(test_board3);
+
     // Liberar toda la memoria pedida en los tests (strings y tableros).
 
 
-    printf("Tests no implementados.\n");
+    // ====== chequeo de resultados ======
+    if (fallos == 0){ //si no hubo fallos, se imprime que todos los tests pasaron
+        printf("Todos los tests pasaron.\n");
+    }
+    else {
+        printf("Hubo %d fallos en los tests.\n", fallos);
+    }
 }
+
 
 // Compara contra "--test" sin depender de string.h ni del Ejercicio 1.
 int esFlagTest(char* arg) {
