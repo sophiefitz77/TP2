@@ -82,9 +82,9 @@ GameBoard* game_board = NULL;
 char* strDuplicate(char* src) {
 
     if(src==NULL){
-        return NULL; //caso base, quizas src sea vacio, si es el caso se devuelve NULL
-
+        return NULL; //caso base, si src es NULL, no hay nada que copiar, se devuelve NULL
     }
+
     int totallen=0;// almacenamos el largo de src en la variable total len 
     for(;src[totallen]!='\0';totallen++){
       // totallen ya es el contador predeterminado   
@@ -137,33 +137,33 @@ char* strConcatenate(char* src1, char* src2) {
         longitud++;
         //realizamos un bucle para comenzar a contar las longitudes de los string.
     }
-// realizamos otro bucle para saber cuanto sera la longitud total para la concatenacion. 
+    // realizamos otro bucle para saber cuanto sera la longitud total para la concatenacion. 
     for(int j=0; src2[j]!='\0';j++){
         longitud++;
     }
-// ya que tenemos la longitud que vamos a necesitar solicitamos memoria con malloc. 
+    // ya que tenemos la longitud que vamos a necesitar solicitamos memoria con malloc. 
     char* res=(char*)malloc((longitud+1)*sizeof(char));
-//evaluamos si solicitar a memoria falla. 
+    //evaluamos si solicitar a memoria falla. 
     if(res==NULL){
         return NULL;
     }
     int indice=0;
-// realizamos un bucle con src1 para concatenar src1 en res indice por indice. 
+    // realizamos un bucle con src1 para concatenar src1 en res indice por indice. 
     for(int g=0; src1[g]!='\0';g++){
         res[indice]=src1[g];
         indice++;
     }
-//al ser punteros distintos realizamos otro bucle para concatenarlo en res. 
+    //al ser punteros distintos realizamos otro bucle para concatenarlo en res. 
     for(int h=0;src2[h]!='\0';h++){
         res[indice]=src2[h];
         indice++;
     }
     // se cierra el string con el caracter nulo.
     res[indice]='\0';
-// liberamos src1 y src2 como pide la consigna. 
+    // liberamos src1 y src2 como pide la consigna. 
     free(src1);
     free(src2);
-//devolvemos la concatenacion total.
+    //devolvemos la concatenacion total.
     return res;
 
 }
@@ -623,8 +623,8 @@ void correrTests() {
 
 
 
-// casos bases de strConcatenate
-// los argumentos se crean con strDuplicate porque strConcatenate los libera internamente.
+    // casos bases de strConcatenate
+    // los argumentos se crean con strDuplicate porque strConcatenate los libera internamente.
     
     char* r1 = strConcatenate(strDuplicate(""), strDuplicate("abc"));
     char* r2 = strConcatenate(strDuplicate("hola "), strDuplicate("mundo"));
