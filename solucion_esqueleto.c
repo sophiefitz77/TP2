@@ -340,7 +340,9 @@ int gameBoardCheckAndClearLines(GameBoard* board) {
             llenas= llenas + 1;
          
 
-        //si la fila no esta ocupada, se pasa a la siguiente
+         // si la fila no esta ocupada, se conserva en la lista: 'antes' avanza a esta fila.
+        // Si se borro, 'antes' NO avanza, asi el siguiente nodo se enlaza con el ultimo
+        // nodo conservado (o pasa a ser first_row si se borro desde la primera fila).
         }else {
             antes = actual;
         }
@@ -614,7 +616,7 @@ void correrTests() {
     if (strCompare(v1, v2) != 0) { printf("FALLO: '' vs ''\n"); fallos++; }
     if (strCompare(a1, a2) != 0) { printf("FALLO: 'a' vs 'a'\n"); fallos++; }
 
-    // Desigualdad en ambos sentidos. Segun tu convencion:
+    // Desigualdad en ambos sentidos. segun la convencion del enunciado 
     // s1 < s2 devuelve 1, y s1 > s2 devuelve -1.
     if (strCompare(a1, b) != 1)  { printf("FALLO: 'a' vs 'b'\n"); fallos++; }
     if (strCompare(b, a1) != -1) { printf("FALLO: 'b' vs 'a'\n"); fallos++; }
@@ -646,6 +648,7 @@ void correrTests() {
     if (test_board == NULL) {
         printf("FALLO: gameBoardNew devuelve NULL\n");
         fallos++;
+        return;
     }
 
     for(int i = 0; i < 5; i++) {
